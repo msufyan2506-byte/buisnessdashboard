@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Dashboard - Customers</title>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --blue: #2a2185;
+            --white: #fff;
+            --grey: #f5f5f5;
+            --black1: #222;
+            --black2: #999;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Ubuntu', sans-serif; }
+        body { min-height: 100vh; overflow-x: hidden; background: var(--grey); }
+        .container { position: relative; width: 100%; }
+
+        /* Sidebar */
+        .navigation {
+            position: fixed; width: 300px; height: 100%; background: var(--blue);
+            border-left: 10px solid var(--blue); transition: 0.5s; overflow: hidden;
+        }
+        .navigation.active { width: 80px; }
+        .navigation ul { position: absolute; top: 0; left: 0; width: 100%; }
+        .navigation ul li { position: relative; width: 100%; list-style: none; border-top-left-radius: 30px; border-bottom-left-radius: 30px; }
+        .navigation ul li:hover, .navigation ul li.hovered { background-color: var(--white); }
+        .navigation ul li:nth-child(1) { margin-bottom: 40px; pointer-events: none; }
+        .navigation ul li a { position: relative; display: block; width: 100%; display: flex; text-decoration: none; color: var(--white); }
+        .navigation ul li:hover a, .navigation ul li.hovered a { color: var(--blue); }
+        .navigation ul li a .icon { position: relative; display: block; min-width: 60px; height: 60px; line-height: 75px; text-align: center; font-size: 1.75rem; }
+        .navigation ul li a .title { position: relative; display: block; padding: 0 10px; height: 60px; line-height: 60px; text-align: start; white-space: nowrap; }
+
+        /* Main Content */
+        .main {
+            position: absolute; width: calc(100% - 300px); left: 300px;
+            min-height: 100vh; background: var(--white); transition: 0.5s;
+        }
+        .main.active { width: calc(100% - 80px); left: 80px; }
+
+        .topbar { width: 100%; height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 10px; }
+        .toggle { position: relative; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; font-size: 2.5rem; cursor: pointer; }
+        
+        /* CUSTOMER SECTION STYLES */
+        .customerSection {
+            padding: 20px;
+            display: block; /* Changed from none to block to show it */
+        }
+        .actionButton {
+            padding: 15px 30px;
+            font-size: 18px;
+            background: var(--blue);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        .actionButton:hover { background: #1e1666; }
+
+        .simpleTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            display: none; 
+            box-shadow: 0 7px 25px rgba(0,0,0,0.08);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .simpleTable th, .simpleTable td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .simpleTable th {
+            background: var(--blue);
+            color: white;
+        }
+        .simpleTable tr:hover { background: #f2f2f2; }
+
+        /* Responsive */
+        @media (max-width: 991px) {
+            .navigation { left: -300px; }
+            .navigation.active { width: 300px; left: 0; }
+            .main { width: 100%; left: 0; }
+            .main.active { left: 300px; }
+        }
+    </style>
+</head>
+<body>
+   <div class="container">
+        <div class="navigation">
+            <ul>
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="business-outline"></ion-icon></span>
+                        <span class="title">My Company</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="index.html">
+                        <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
+                        <span class="title">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="customer.html">
+                        <span class="icon"><ion-icon name="people-outline"></ion-icon></span>
+                        <span class="title">Customers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="messege.html">
+                        <span class="icon"><ion-icon name="chatbox-ellipses-outline"></ion-icon></span>
+                        <span class="title">Messages</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="dummy.html">
+                        <span class="icon"><ion-icon name="analytics-outline"></ion-icon></span>
+                        <span class="title"> Data</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="settings-outline"></ion-icon></span>
+                        <span class="title">Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="log-out-outline"></ion-icon></span>
+                        <span class="title">Sign Out</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="main">
+            <div class="topbar">
+                <div class="toggle"><ion-icon name="menu-outline"></ion-icon></div>
+                <h2>Admin Panel</h2>
+            </div>
+
+            <div id="view-customers" class="customerSection">
+                <h2>Customer Database</h2>
+                <br>
+                <button class="actionButton" onclick="openTable()">Load Customer Data</button>
+
+                <table class="simpleTable" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>101</td><td>Ali Khan</td></tr>
+                        <tr><td>102</td><td>Sarah Ahmed</td></tr>
+                        <tr><td>103</td><td>John Doe</td></tr>
+                        <tr><td>104</td><td>Fatima Bilal</td></tr>
+                        <tr><td>105</td><td>Zeeshan Malik</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar Toggle
+        let toggle = document.querySelector('.toggle');
+        let navigation = document.querySelector('.navigation');
+        let main = document.querySelector('.main');
+
+        toggle.onclick = function(){
+            navigation.classList.toggle('active');
+            main.classList.toggle('active');
+        }
+
+        // Table Toggle Logic
+        function openTable() {
+            var table = document.getElementById("myTable");
+            if (table.style.display === "none" || table.style.display === "") {
+                table.style.display = "table";
+            } else {
+                table.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
